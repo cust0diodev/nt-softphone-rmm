@@ -1,0 +1,37 @@
+name: Validate MSI as SYSTEM
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: windows-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download candidate MSI
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release download nt-softphone-3.21.3-r3 --pattern '*.msi' --dir .
+      - name: Install, repair and uninstall as SYSTEM
+        shell: pwsh
+        run: |
+          $script = Join-Path $PWD 'Test-Msi.ps1'
+          $action = New-ScheduledTaskAction -Execute 'powershell.exe' -Argument ('-NoProfile -ExecutionPolicy Bypass -File "' + $script + '"')
+          $principal = New-ScheduledTaskPrincipal -UserId 'SYSTEM' -LogonType ServiceAccount -RunLevel Highest
+          Register-ScheduledTask -TaskName 'Test-NT-Softphone-MSI' -Action $action -Principal $principal -Force | Out-Null
+          Start-ScheduledTask -TaskName 'Test-NT-Softphone-MSI'
+          $deadline = (Get-Date).AddMinutes(5)
+          while (!(Test-Path test-result.json) -and (Get-Date) -lt $deadline) { Start-Sleep 2 }
+          if (!(Test-Path test-result.json)) { throw 'SYSTEM test timed out' }
+          Get-Content test-result.json
+          $result = Get-Content test-result.json -Raw | ConvertFrom-Json
+          if (!$result.success) { throw $result.error }
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: msi-validation
+          path: |
+            test-result.json
+            *.log
