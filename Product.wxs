@@ -1,0 +1,100 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+  <Product Id="*" Name="NT Softphone" Language="1046" Version="3.21.3" Manufacturer="NT Softphone" UpgradeCode="BFAE6EF5-F703-459F-94B9-CC79DCA8A398">
+    <Package InstallerVersion="500" Compressed="yes" InstallScope="perMachine" Platform="x86" Description="NT Softphone 3.21.3 - RMM repack of installer revision 3" />
+    <MajorUpgrade DowngradeErrorMessage="Uma versao mais recente do NT Softphone ja esta instalada." Schedule="afterInstallInitialize" />
+    <MediaTemplate EmbedCab="yes" CompressionLevel="high" />
+    <Property Id="ARPCOMMENTS" Value="MSI repack for RMM. Original application files unchanged. SIP accounts are configured separately per user." />
+    <Property Id="ARPHELPLINK" Value="https://github.com/cust0diodev/nt-softphone-rmm" />
+    <Directory Id="TARGETDIR" Name="SourceDir">
+      <Directory Id="ProgramFilesFolder">
+        <Directory Id="INSTALLFOLDER" Name="NT Softphone">
+          <Component Id="C_F_avcodec_57_dll" Guid="*">
+            <File Id="F_avcodec_57_dll" Source="payload\avcodec-57.dll" KeyPath="yes">
+            </File>
+          </Component>
+          <Component Id="C_F_avformat_57_dll" Guid="*">
+            <File Id="F_avformat_57_dll" Source="payload\avformat-57.dll" KeyPath="yes">
+            </File>
+          </Component>
+          <Component Id="C_F_avutil_55_dll" Guid="*">
+            <File Id="F_avutil_55_dll" Source="payload\avutil-55.dll" KeyPath="yes">
+            </File>
+          </Component>
+          <Component Id="C_F_hangup_wav" Guid="*">
+            <File Id="F_hangup_wav" Source="payload\hangup.wav" KeyPath="yes">
+            </File>
+          </Component>
+          <Component Id="C_F_lame_enc_dll" Guid="*">
+            <File Id="F_lame_enc_dll" Source="payload\lame_enc.dll" DefaultLanguage="0" KeyPath="yes">
+            </File>
+          </Component>
+          <Component Id="C_F_License_txt" Guid="*">
+            <File Id="F_License_txt" Source="payload\License.txt" KeyPath="yes">
+            </File>
+          </Component>
+          <Component Id="C_F_msgin_wav" Guid="*">
+            <File Id="F_msgin_wav" Source="payload\msgin.wav" KeyPath="yes">
+            </File>
+          </Component>
+          <Component Id="C_F_msgout_wav" Guid="*">
+            <File Id="F_msgout_wav" Source="payload\msgout.wav" KeyPath="yes">
+            </File>
+          </Component>
+          <Component Id="C_F_NT_Softphone_exe" Guid="*">
+            <File Id="F_NT_Softphone_exe" Source="payload\NT Softphone.exe" KeyPath="yes">
+              <Shortcut Id="StartMenuShortcut" Directory="AppMenuFolder" Name="NT Softphone" WorkingDirectory="INSTALLFOLDER" Advertise="yes" />
+              <Shortcut Id="DesktopShortcut" Directory="DesktopFolder" Name="NT Softphone" WorkingDirectory="INSTALLFOLDER" Advertise="yes" />
+            </File>
+          </Component>
+          <Component Id="C_F_ringing_wav" Guid="*">
+            <File Id="F_ringing_wav" Source="payload\ringing.wav" KeyPath="yes">
+            </File>
+          </Component>
+          <Component Id="C_F_ringing2_wav" Guid="*">
+            <File Id="F_ringing2_wav" Source="payload\ringing2.wav" KeyPath="yes">
+            </File>
+          </Component>
+          <Component Id="C_F_ringtone_wav" Guid="*">
+            <File Id="F_ringtone_wav" Source="payload\ringtone.wav" KeyPath="yes">
+            </File>
+          </Component>
+          <Component Id="C_F_SDL2_dll" Guid="*">
+            <File Id="F_SDL2_dll" Source="payload\SDL2.dll" KeyPath="yes">
+            </File>
+          </Component>
+          <Component Id="C_F_swscale_4_dll" Guid="*">
+            <File Id="F_swscale_4_dll" Source="payload\swscale-4.dll" KeyPath="yes">
+            </File>
+          </Component>
+          <Component Id="MenuCleanup" Guid="*">
+            <RemoveFolder Id="RemoveAppMenu" On="uninstall" Directory="AppMenuFolder" />
+            <RegistryValue Root="HKLM" Key="Software\NT Softphone\RMM" Name="Installed" Type="integer" Value="1" KeyPath="yes" />
+          </Component>
+        </Directory>
+      </Directory>
+      <Directory Id="ProgramMenuFolder">
+        <Directory Id="AppMenuFolder" Name="NT Softphone">
+        </Directory>
+      </Directory>
+      <Directory Id="DesktopFolder" />
+    </Directory>
+    <Feature Id="MainFeature" Title="NT Softphone" Level="1">
+      <ComponentRef Id="MenuCleanup" />
+      <ComponentRef Id="C_F_avcodec_57_dll" />
+      <ComponentRef Id="C_F_avformat_57_dll" />
+      <ComponentRef Id="C_F_avutil_55_dll" />
+      <ComponentRef Id="C_F_hangup_wav" />
+      <ComponentRef Id="C_F_lame_enc_dll" />
+      <ComponentRef Id="C_F_License_txt" />
+      <ComponentRef Id="C_F_msgin_wav" />
+      <ComponentRef Id="C_F_msgout_wav" />
+      <ComponentRef Id="C_F_NT_Softphone_exe" />
+      <ComponentRef Id="C_F_ringing_wav" />
+      <ComponentRef Id="C_F_ringing2_wav" />
+      <ComponentRef Id="C_F_ringtone_wav" />
+      <ComponentRef Id="C_F_SDL2_dll" />
+      <ComponentRef Id="C_F_swscale_4_dll" />
+    </Feature>
+  </Product>
+</Wix>
