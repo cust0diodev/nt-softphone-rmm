@@ -2,7 +2,7 @@ name: Validate MSI as SYSTEM
 on:
   workflow_dispatch:
 permissions:
-  contents: read
+  contents: write
 jobs:
   validate:
     runs-on: windows-latest
